@@ -20,7 +20,7 @@ export class BuscaComponent {
     this.pokemones=[];
     if (nombres.length != 0) {
       try {
-        nombres.forEach(async element => {
+        nombres.forEach(async (element) => {
           const pokemon = await this.pokeService.getMiPokemonPorNombre(element);
           this.pokemones.push(pokemon);
         });   

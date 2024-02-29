@@ -1,19 +1,30 @@
 export class MiPokemon {
   id: number;
-  name: string;
-  base_experience: number;
-  height: number;
-  is_default: boolean;
-  order: number;
-  weight: number;
+  nombre: string;
+  experiencia_base: number;
+  altura: number;
+  es_favorito: boolean;
+  orden: number;
+  peso: number;
+  movimientos: Map<string, string>;
+  habilidades: Map<string, string>;
+  sprite: string;
+  tipos: string[];
 
-  constructor(id?:number,name?:string,base_experience?:number,height?:number,is_default?:boolean,order?:number,weight?:number){
-    this.id=id??0;
-    this.name=name??"";
-    this.base_experience=base_experience??0;
-    this.height=height??0;
-    this.is_default=is_default??false;
-    this.order=order??0;
-    this.weight=weight??0;
+  constructor(id?: number, name?: string, base_experience?: number,
+    height?: number, es_favorito?: boolean, order?: number, weight?: number,
+    movimientos?: Map<string, string>, habilidades?: Map<string, string>,
+    sprite?: string, tipos?: string[]) {
+    this.id = id??0;
+    this.nombre = name??"";
+    this.experiencia_base = base_experience??0;
+    this.altura = height??0;
+    this.es_favorito = es_favorito??false;
+    this.orden = order??0;
+    this.peso = weight??0;
+    this.movimientos=movimientos??new Map<string,string>();
+    this.habilidades=habilidades??new Map<string,string>();
+    this.sprite=sprite??"No disponible";
+    this.tipos=tipos??[""];
   }
 }
