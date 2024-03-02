@@ -10,6 +10,8 @@ import { HomeComponent } from './home/home.component';
 import { BuscaComponent } from './busca/busca.component';
 import { FavoritosComponent } from './favoritos/favoritos.component';
 
+import {MatGridListModule} from '@angular/material/grid-list';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,6 +23,7 @@ import { FavoritosComponent } from './favoritos/favoritos.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    MatGridListModule
   ],
   providers: [
     provideClientHydration(),

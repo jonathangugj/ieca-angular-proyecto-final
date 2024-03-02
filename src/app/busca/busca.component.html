@@ -1,1 +1,14 @@
-
+<div class="row container">
+  <div class="col s3" *ngFor="let pokemon of pokemones">
+    <div class="card">
+      <div class="card-content white-text">
+        <span class="card-title">{{ pokemon.nombre }}</span>
+        <p></p>
+      </div>
+      <div class="card-action">
+        <a href="#">This is a link</a>
+        <a href="#">This is a link</a>
+      </div>
+    </div>
+  </div>
+</div>
