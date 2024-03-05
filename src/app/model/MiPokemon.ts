@@ -1,30 +1,31 @@
-export class MiPokemon {
-  id: number;
-  nombre: string;
-  experiencia_base: number;
-  altura: number;
-  es_favorito: boolean;
-  orden: number;
-  peso: number;
-  movimientos: Map<string, string>;
-  habilidades: Map<string, string>;
-  sprite: string;
-  tipos: string[];
+import { NamedAPIResource, Pokemon, PokemonAbility, PokemonHeldItem, PokemonMove, PokemonPastType, PokemonSprites, PokemonStat, PokemonType, VersionGameIndex } from "pokenode-ts";
+import { MiEspecie } from "./MiEspecie";
 
-  constructor(id?: number, name?: string, base_experience?: number,
-    height?: number, es_favorito?: boolean, order?: number, weight?: number,
-    movimientos?: Map<string, string>, habilidades?: Map<string, string>,
-    sprite?: string, tipos?: string[]) {
-    this.id = id??0;
-    this.nombre = name??"";
-    this.experiencia_base = base_experience??0;
-    this.altura = height??0;
-    this.es_favorito = es_favorito??false;
-    this.orden = order??0;
-    this.peso = weight??0;
-    this.movimientos=movimientos??new Map<string,string>();
-    this.habilidades=habilidades??new Map<string,string>();
-    this.sprite=sprite??"No disponible";
-    this.tipos=tipos??[""];
+export class MiPokemon implements Pokemon {
+  public habilidades:string[]=[];
+  public especie?: MiEspecie;
+  constructor(
+    public id: number,
+    public name: string,
+    public base_experience: number,
+    public height: number,
+    public is_default: boolean,
+    public order: number,
+    public weight: number,
+    public abilities: PokemonAbility[],
+    public forms: NamedAPIResource[],
+    public game_indices: VersionGameIndex[],
+    public held_items: PokemonHeldItem[],
+    public location_area_encounters: string,
+    public moves: PokemonMove[],
+    public sprites: PokemonSprites,
+    public species: NamedAPIResource,
+    public stats: PokemonStat[],
+    public types: PokemonType[],
+    public past_types: PokemonPastType[],
+    public is_favorite: boolean) {
+      this.abilities.forEach((element=>{
+        this.habilidades.push(element.ability.name);
+      }));
   }
 }

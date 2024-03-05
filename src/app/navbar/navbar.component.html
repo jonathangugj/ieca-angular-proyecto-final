@@ -1,12 +1,15 @@
-<nav class="red darken-4">
-	<div class="nav-wrapper">
-		<a routerLink="/home" class="sidenav-trigger" data-target="mobile-nav">
-			<i class="material-icons">menu</i>
-		</a>
-    <a routerLink="/home" class="brand-logo">Diccionario pokemon</a>
-		<ul class="right hide-on-med-and-down "  >
-			<li><a routerLink="/busca">Buscar</a></li>
-			<li><a routerLink="/favoritos">Favoritos</a></li>
-		</ul>
-	</div>
-</nav>
+<p>
+	<mat-toolbar color="primary">
+	  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+		<mat-icon>menu</mat-icon>
+	  </button>
+	  <span>Diccionario Pokemon</span>
+	  <span class="example-spacer"></span>
+	  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+		<mat-icon>favorite</mat-icon>
+	  </button>
+	  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" routerLink="/busca">
+		<mat-icon>search</mat-icon>
+	  </button>
+	</mat-toolbar>
+</p>

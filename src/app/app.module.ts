@@ -11,6 +11,13 @@ import { BuscaComponent } from './busca/busca.component';
 import { FavoritosComponent } from './favoritos/favoritos.component';
 
 import {MatGridListModule} from '@angular/material/grid-list';
+import { DetalleComponent } from './detalle/detalle.component';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatIcon, MatIconModule} from '@angular/material/icon';
+import {MatCardModule} from '@angular/material/card';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -18,12 +25,19 @@ import {MatGridListModule} from '@angular/material/grid-list';
     NavbarComponent,
     HomeComponent,
     BuscaComponent,
-    FavoritosComponent
+    FavoritosComponent,
+    DetalleComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatGridListModule
+    MatGridListModule,
+    MatToolbarModule,
+    MatIcon,
+    MatCardModule,
+    MatDividerModule,
+    MatTabsModule,
+    MatPaginatorModule
   ],
   providers: [
     provideClientHydration(),

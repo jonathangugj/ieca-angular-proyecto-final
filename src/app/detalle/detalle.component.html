@@ -1,0 +1,36 @@
+<mat-card class="example-card poke-card" *ngIf="pokemon">
+  <mat-card-header>
+    <!-- <mat-card-title></mat-card-title> -->
+    <mat-card-title>#{{pokemon.id}} {{pokemon.name | titlecase}}</mat-card-title>
+    <mat-card-subtitle>
+      <div>
+        <div *ngFor="let tipo of pokemon.types" class="poke-type poke-inline">{{tipo.type.name | titlecase}}</div>
+      </div>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="poke-backgr">
+      <img src="{{pokemon.sprites.front_default}}" alt="Imagen {{pokemon.name | titlecase}}">
+    </div>
+    <mat-divider></mat-divider>
+    <mat-tab-group>
+      <mat-tab label="Acerca de">
+        <div class="row">
+          <div class="col s6">Especie:</div><div class="col s6">{{pokemon.especie?.name}}</div>
+          <div class="col s6">Altura:</div><div class="col s6">{{pokemon.height}} dm</div>
+          <div class="col s6">Peso:</div><div class="col s6">{{pokemon.height}} hg</div>
+          <div class="col s6">Habilidades:</div><div class="col s6">{{pokemon.habilidades.join(",")}}</div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Atributos Base">
+
+      </mat-tab>
+      <mat-tab label="Movimientos">
+
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button>LIKE</button>
+  </mat-card-actions>
+</mat-card>
