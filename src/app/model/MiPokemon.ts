@@ -1,8 +1,11 @@
 import { NamedAPIResource, Pokemon, PokemonAbility, PokemonHeldItem, PokemonMove, PokemonPastType, PokemonSprites, PokemonStat, PokemonType, VersionGameIndex } from "pokenode-ts";
 import { MiEspecie } from "./MiEspecie";
+import { Utilidades } from "./Utilidades";
+import { MiMovimiento } from "./MiMovimiento";
 
 export class MiPokemon implements Pokemon {
   public habilidades:string[]=[];
+  public movimientos?: MiMovimiento[];
   public especie?: MiEspecie;
   constructor(
     public id: number,
@@ -25,7 +28,25 @@ export class MiPokemon implements Pokemon {
     public past_types: PokemonPastType[],
     public is_favorite: boolean) {
       this.abilities.forEach((element=>{
-        this.habilidades.push(element.ability.name);
+        this.habilidades.push(element.ability.name[0].toUpperCase() + element.ability.name.slice(1,element.ability.name.length));
       }));
+  }
+
+  getEspecie():string{
+    let especie: string[]=[];
+    this.especie?.egg_groups.forEach((e)=>{
+      especie.push(e.name[0].toUpperCase() + e.name.slice(1,(e.name.length)));
+    });
+    return especie.join(",");
+  }
+
+  getDescripcion(): string{
+    let descripcion: string ="";
+    this.especie?.flavor_text_entries.forEach((e)=>{
+      if(e.language.name==="en")
+        descripcion=e.flavor_text;  
+    });
+    
+    return descripcion;
   }
 }

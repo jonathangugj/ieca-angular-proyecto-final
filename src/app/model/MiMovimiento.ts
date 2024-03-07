@@ -31,4 +31,24 @@ export class MiMovimiento implements Move {
 
     }
 
+    public getNombre():string {
+        let nombre = this.names.find((e)=> e.language.name === "en");
+        if (nombre === undefined){
+            return this.name;
+        } 
+        return nombre.name;
+    }
+
+    public getDescripcion():string{
+        let descripcion=this.flavor_text_entries.find((e)=> e.language.name === "en");
+        if (descripcion === undefined){
+            return "Sin información";
+        }
+        return descripcion.flavor_text;
+    }
+
+    public getTipo(): string {
+        return this.type.name;
+    }
+
 }

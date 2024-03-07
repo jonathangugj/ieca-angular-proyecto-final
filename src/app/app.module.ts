@@ -18,7 +18,9 @@ import {MatCardModule} from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatPaginatorModule} from '@angular/material/paginator';
-
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { BuscarComponent } from './buscar/buscar.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,6 +29,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     BuscaComponent,
     FavoritosComponent,
     DetalleComponent,
+    BuscarComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,7 +40,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatCardModule,
     MatDividerModule,
     MatTabsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatTooltipModule
   ],
   providers: [
     provideClientHydration(),

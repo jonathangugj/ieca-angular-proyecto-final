@@ -5,6 +5,7 @@ import { AppComponent } from '../app.component';
 import { DetalleComponent } from '../detalle/detalle.component';
 import { Utilidades } from '../model/Utilidades';
 import { MiMovimiento } from '../model/MiMovimiento';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-busca',
@@ -12,11 +13,9 @@ import { MiMovimiento } from '../model/MiMovimiento';
   styleUrl: './busca.component.scss',
 })
 export class BuscaComponent {
-
   constructor(private pokeService: PokemonService){}
 
-  @Input() movimientos?: MiMovimiento[];
-  
+  public movimientos: MiMovimiento[]=[];
   public pokemones:MiPokemon[]=[];
   public totalPokemones: number=0;
   public numeroPaginas:number=0;
@@ -25,7 +24,13 @@ export class BuscaComponent {
   public elementos: number = AppComponent.TOT_X_PAGINA;
 
   async consultaPokemones(inicio: number, cantidad:number){
-    Utilidades.aLog("inicio consultaPokemones");
+    if (this.pokemones.length > 0) {
+      Utilidades.aLog("Se depura lista de pokmones");
+      while(this.pokemones.length > 0) {
+        this.pokemones.pop();
+      }
+    }
+    Utilidades.aLog(`inicio consultaPokemones, inicio:[${inicio}], cantidad:[${cantidad}]`);
     let nombres = await this.pokeService.getListaPokemon(inicio,cantidad);
     if (nombres.length != 0) {
       try {
@@ -70,9 +75,19 @@ export class BuscaComponent {
     Utilidades.aLog("fin setPaginacion");
   }
 
+  getMovimientos(){
+    //Se suscribe al servicio que emitira todos los movimientos de los pokemones
+    this.pokeService.getMovimientos().subscribe(m => this.movimientos=m);
+  }
+
   ngOnInit(){
-    this.consultaPokemones(0, AppComponent.TOT_X_PAGINA);
+    this.consultaPokemones(0, 10);
     this.setPaginacion();
+    //this.getMovimientos();
+  }
+
+  handlePageEvent($event: PageEvent) {
+    this.consultaPokemones(($event.pageIndex * 10), AppComponent.TOT_X_PAGINA);
   }
 
 }

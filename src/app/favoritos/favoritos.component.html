@@ -1,1 +1,5 @@
-<p>favoritos works!</p>
+<div class="row">
+    <div class="col s6" *ngFor="let pokemon of favoritos">
+        <app-detalle [pokemon]="pokemon"></app-detalle>
+    </div>
+</div>
