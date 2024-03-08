@@ -1,15 +1,16 @@
 
 <div class="row">
   <div class="col s12">
-    <mat-paginator [length]="numeroPaginas"
-    [pageSize]="elementos"
-    [pageSizeOptions]="[10]"
+    <mat-paginator [length]="totalPokemones"
+    [pageSize]="5"
+    [pageSizeOptions]="[5,10,20,30]"
     [pageIndex]="0"
+    [showFirstLastButtons]="true"
     (page)="handlePageEvent($event)"
     >
     </mat-paginator>
   </div>
   <div class="col s6" *ngFor="let pokemon of pokemones">
-    <app-detalle [pokemon]="pokemon"></app-detalle>
+    <app-detalle [pokemon]="pokemon" [padre]="padre"></app-detalle>
   </div>
 </div>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
 import { MiPokemon } from '../model/MiPokemon';
+import { LoggingService } from '../logging.service';
 
 @Component({
   selector: 'app-favoritos',
@@ -10,13 +11,17 @@ import { MiPokemon } from '../model/MiPokemon';
 export class FavoritosComponent {
   
   public favoritos: MiPokemon[]=[];
+  public padre:string="favoritos";
   
-  constructor(private servicio: PokemonService ){
+  constructor(
+    private servicio: PokemonService,
+    private logger: LoggingService
+  ){
 
   }
   
-
   getFavoritos(){
+    this.logger.logVerbose(`[FavoritosComponent] Consultando favoritos`);
     this.favoritos=this.servicio.getFavoritos();
   }
 

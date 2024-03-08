@@ -1,11 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component} from '@angular/core';
 import { MiPokemon } from '../model/MiPokemon';
 import { PokemonService } from '../pokemon.service';
 import { AppComponent } from '../app.component';
-import { DetalleComponent } from '../detalle/detalle.component';
-import { Utilidades } from '../model/Utilidades';
-import { MiMovimiento } from '../model/MiMovimiento';
 import { PageEvent } from '@angular/material/paginator';
+import { LoggingService } from '../logging.service';
 
 @Component({
   selector: 'app-busca',
@@ -13,24 +11,29 @@ import { PageEvent } from '@angular/material/paginator';
   styleUrl: './busca.component.scss',
 })
 export class BuscaComponent {
-  constructor(private pokeService: PokemonService){}
+  constructor(
+    private pokeService: PokemonService,
+    private logger: LoggingService
+  ){}
 
-  public movimientos: MiMovimiento[]=[];
   public pokemones:MiPokemon[]=[];
-  public totalPokemones: number=0;
-  public numeroPaginas:number=0;
+  public totalPokemones: number=500;
   public paginas: number[]=[];
-  public hayPaginacion:boolean=false;
-  public elementos: number = AppComponent.TOT_X_PAGINA;
+  public padre:string="busca";
 
   async consultaPokemones(inicio: number, cantidad:number){
+    this.logger.logVerbose("[BuscaComponent] Inicio consultaPokemones");
     if (this.pokemones.length > 0) {
-      Utilidades.aLog("Se depura lista de pokmones");
+      this.logger.logVerbose("[BuscaComponent] Se depura lista de pokemos para nueva consulta ", this.pokemones.length);
       while(this.pokemones.length > 0) {
         this.pokemones.pop();
       }
     }
-    Utilidades.aLog(`inicio consultaPokemones, inicio:[${inicio}], cantidad:[${cantidad}]`);
+    if ((inicio+cantidad)>this.totalPokemones){
+      this.logger.logVerbose("[BuscaComponent] Pokemones restantes menores a cantidad a solicitar");
+      cantidad=this.totalPokemones-inicio;
+    }
+    this.logger.logVerbose(`[BuscaComponent] Inicio consultaPokemones, inicio:[${inicio}], cantidad:[${cantidad}]`);
     let nombres = await this.pokeService.getListaPokemon(inicio,cantidad);
     if (nombres.length != 0) {
       try {
@@ -40,7 +43,7 @@ export class BuscaComponent {
             this.pokemones.push(pokemon);
         });   
       } catch (error) {
-        console.error(error);
+        this.logger.logError(error);
       }
     }
     this.pokemones.sort((a,b)=>{
@@ -51,43 +54,17 @@ export class BuscaComponent {
       else
         return 0; 
     });
-    Utilidades.aLog("fin consultaPokemones");
-  }
-
-  async setPaginacion(){
-    Utilidades.aLog("inicio setPaginacion");
-    try {
-      this.totalPokemones = await this.pokeService.getTotalPokemones();
-      this.numeroPaginas=Math.floor(this.totalPokemones/AppComponent.TOT_X_PAGINA); 
-      if(this.totalPokemones%AppComponent.TOT_X_PAGINA!==0)
-        this.numeroPaginas++;
-      if(this.numeroPaginas > 1){
-        this.hayPaginacion=false;
-        for (let index = 0; index < this.numeroPaginas; index++) {
-          this.paginas.push(index)
-        }
-      }
-      Utilidades.aLog(`Total de pokemones: ${this.totalPokemones}`);
-      Utilidades.aLog(`Numero de paginas: ${this.numeroPaginas}`);  
-    } catch (error) {
-      console.error(error);
-    }
-    Utilidades.aLog("fin setPaginacion");
-  }
-
-  getMovimientos(){
-    //Se suscribe al servicio que emitira todos los movimientos de los pokemones
-    this.pokeService.getMovimientos().subscribe(m => this.movimientos=m);
+    this.logger.logVerbose("[BuscaComponent] Fin consultaPokemones");
   }
 
   ngOnInit(){
-    this.consultaPokemones(0, 10);
-    this.setPaginacion();
-    //this.getMovimientos();
+    this.logger.logInfo(`[BuscaComponent] Total de pokemones: ${this.totalPokemones}`);
+    this.consultaPokemones(0, 5);
   }
 
   handlePageEvent($event: PageEvent) {
-    this.consultaPokemones(($event.pageIndex * 10), AppComponent.TOT_X_PAGINA);
+    this.logger.logVerbose("[BuscaComponent] Cargando pagina seleccionada");
+    this.consultaPokemones(($event.pageIndex * $event.pageSize), $event.pageSize);
   }
 
 }

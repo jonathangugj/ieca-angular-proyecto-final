@@ -1,0 +1,5 @@
+<h2 mat-card-title>Eliminar a {{data.pokemon.name | titlecase}} de favoritos?</h2>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close first-tabbable>No, Gracias</button>
+  <button mat-button [mat-dialog-close]="respuestaSi">Si</button>
+</mat-dialog-actions>

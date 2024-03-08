@@ -5,6 +5,7 @@ import { Utilidades } from './model/Utilidades';
 import { MiEspecie } from './model/MiEspecie';
 import { MiMovimiento } from './model/MiMovimiento';
 import { Observable, of } from 'rxjs';
+import { LoggingService } from './logging.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import { Observable, of } from 'rxjs';
 
 export class PokemonService {
 
-  constructor() { }
+  constructor(private logger: LoggingService) { }
 
   private static api = new PokemonClient();
   private static api_moves = new MoveClient();
@@ -21,62 +22,61 @@ export class PokemonService {
   private favoritos: MiPokemon[]=[];
 
   addFavoritos(pokemon: MiPokemon){
+    this.logger.logVerbose("[PokemonService] Entrando a addFavoritos");
     //Se valida si el elemento esta duplicado
     if (this.favoritos.length !== 0) {
       let miPokemon=this.favoritos.find((e)=> e.id === pokemon.id);
       if (miPokemon !== undefined) {
-        //Se crea una nueva copia del arreglo sin el elemento seleccionado
+        this.logger.logVerbose(`[PokemonService] Elemento ${pokemon.name} en favoritos, se removera`);
         this.favoritos=this.favoritos.filter((e)=>{
           return e.id !== pokemon.id;
         });
       } else {
         this.favoritos.push(pokemon);
-        console.log(pokemon);
+        this.logger.logVerbose(`[PokemonService] Se agrega ${pokemon.name} a favoritos`, this.favoritos.length);
       }
     } else {
       this.favoritos.push(pokemon);
-      console.log(pokemon);
+      this.logger.logVerbose(`[PokemonService] Se agrega ${pokemon.name} a favoritos`, this.favoritos.length);
     }
   }
 
   getFavoritos(): MiPokemon[]{
+    this.logger.logVerbose(`[PokemonService] Numero de pokemones en favoritos [${this.favoritos.length}]`);
     return this.favoritos;
   }
 
   esFavorito(pokemon:MiPokemon): boolean {
     let miPokemon=this.favoritos.find((e)=> e.id === pokemon.id);
     if (miPokemon !== undefined) {
+      this.logger.logVerbose(`[PokemonService] ${pokemon} esta en favoritos`);
       return true;
     }
+    this.logger.logVerbose(`[PokemonService] ${pokemon} NO esta en favoritos`);
     return false;  
   }
 
   async getListaPokemon(inicio: number, cantidad:number): Promise<string[]>{
+    this.logger.logVerbose(`[PokemonService] Inicio getListaPokemon`);
+    this.logger.logVerbose(`[PokemonService] Obteniendo [${cantidad}] pokemones, iniciando en ${inicio}`);
     let nombres: string[]=[];
-    
     try{
       const data = await PokemonService.api.listPokemons(inicio,cantidad);
       data.results.forEach((element=>{
         nombres.push(element.name);
       }));
+      this.logger.logVerbose(`[PokemonService] Fin getListaPokemon`);
       return nombres;
     } catch (error){
-      console.error(error);
+      this.logger.logError(error);
     }
+    this.logger.logVerbose(`[PokemonService] Fin getListaPokemon`);
     return nombres;
   }
 
-  async getTotalPokemones(): Promise<number> {
-    try {
-      let data = await PokemonService.api.listPokemons();
-      return data.count;  
-    } catch (error) {
-      console.error(error);
-    }
-    return -1;
-  }
-
   async getMiPokemonPorNombre(nombre: string): Promise<MiPokemon|null>{
+    this.logger.logVerbose(`[PokemonService] Inicio getMiPokemonPorNombre (${nombre})`);
+
     try{
       //Se consulta la información del pokemon
       const data = await PokemonService.api.getPokemonByName(nombre);
@@ -110,79 +110,12 @@ export class PokemonService {
           movimiento.target, movimiento.type,movimiento.learned_by_pokemon));
       });
       pokemon.movimientos=movimientos;
+      this.logger.logVerbose(`[PokemonService] Fin getMiPokemonPorNombre (${nombre})`);
       return pokemon;
     }catch (error){
-      console.error(error);
+      this.logger.logError(error);
     }
+    this.logger.logVerbose(`[PokemonService] Fin getMiPokemonPorNombre (${nombre})`);
     return null;
-  }
-
-  async listaMovimientos(): Promise<MiMovimiento[]>{
-    let movimientos: MiMovimiento[]=[];
-    try {
-      const data = await PokemonService.api_moves.listMoves();
-      let numeroMovimientos = data.count;
-      Utilidades.aLog(`Numero de movimientos x consultar:[${numeroMovimientos}]`);
-      let contadorMovimientos: number = 0;
-      let consultaTerminada:boolean=false;
-      if (numeroMovimientos > 0){
-        while(!consultaTerminada){
-          const movs = await PokemonService.api_moves.listMoves(contadorMovimientos,50);
-          movs.results.forEach(async (e)=>{
-            const mov = await PokemonService.api_moves.getMoveByName(e.name);
-            const movimiento = new MiMovimiento(
-              mov.id,mov.name,mov.accuracy,mov.effect_chance,mov.pp,mov.priority,
-              mov.power,mov.contest_combos,mov.contest_types,mov.contest_effect,
-              mov.damage_class,mov.effect_entries,mov.effect_changes,mov.flavor_text_entries,
-              mov.generation,mov.machines,mov.meta,mov.names,mov.past_values,
-              mov.stat_changes,mov.super_contest_effect,mov.target,mov.type,mov.learned_by_pokemon
-            );
-            movimientos.push(movimiento);
-            contadorMovimientos++;
-          });
-          //Utilidades.aLog(`Movimientos leidos: [${contadorMovimientos}]`);
-          //this.sleep(500);
-          if (contadorMovimientos === numeroMovimientos)consultaTerminada=true;
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    return movimientos;
-  }
-
-  sleep(ms:number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }  
-
-  getMovimientos(): Observable<MiMovimiento[]>{
-    this.listaMovimientos();
-    const movs=of(this.movimientos);
-    return movs;
-  }
-
-  async buscaHabilidad(habilidad: PokemonAbility, habilidades: Map<string, string>) {
-    try {
-      const data = await PokemonService.api.getAbilityByName(habilidad.ability.name);
-      //Se obtiene la descripcion de la habilidad de acuerdo al idioma "es"
-      let descripciones=data.flavor_text_entries;
-      let descripcion: string = "";
-      descripciones.find((element)=>{
-        if (element.language.name==="es") {
-          descripcion = element.flavor_text;
-        }
-      });
-      //Se obtiene el nombre de la habilidad
-      let nombres=data.names;
-      let nombre: string = "";
-      nombres.find((element)=>{
-        if(element.language.name==="es"){
-          nombre=element.name;
-        }
-      });
-      habilidades.set(nombre, descripcion);
-    } catch (error) {
-      console.error(error);
-    }
   }
 }
