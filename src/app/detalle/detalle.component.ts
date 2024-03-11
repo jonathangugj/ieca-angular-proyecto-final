@@ -21,12 +21,14 @@ export class DetalleComponent {
   @Input() pokemon?: MiPokemon;
   @Input() padre?: string;
 
-  agregaFavoritos(pokemon: MiPokemon) {
-    this.logger.logVerbose(`[DetalleComponent] Agregando a favoritos a ${pokemon.name}`);
-    this.servicio.addFavoritos(pokemon);
+  public agregaFavoritos() {
+    if (this.pokemon !== undefined) {
+      this.logger.logVerbose(`[DetalleComponent] Agregando a favoritos a ${this.pokemon.name}`);
+      this.servicio.addFavoritos(this.pokemon);
+    }
   }
 
-  getMuestro(): boolean {
+  public getMuestro(): boolean {
     if (this.padre===undefined) {
       return false;
     } else {
@@ -36,19 +38,19 @@ export class DetalleComponent {
         if (this.pokemon === undefined)
           return false;
         else
-          return this.servicio.esFavorito(this.pokemon);
+          return this.pokemon.is_favorite;
       }
     }
   }
 
-  getMuestraEnFavoritos():boolean{
+  public getMuestraEnFavoritos():boolean{
     if (this.padre !== undefined)
       return this.padre==="favoritos";
     else 
       return false;
   }
 
-  getMuestraEnBusca():boolean{
+  public getMuestraEnBusca():boolean{
     if (this.padre !== undefined)
       return this.padre==="busca";
     else 
@@ -59,15 +61,23 @@ export class DetalleComponent {
     if (this.pokemon === undefined){
       return " ";
     }
-    return this.servicio.esFavorito(this.pokemon)?"primary":"";
+      return this.pokemon.is_favorite?"primary":"";
   }
 
-  muestraModal(p: MiPokemon) {
+  public muestraModal() {
     let respuesta:string="";
     const dialogRef = this.modal.open(
       ModalSiNoComponent,
-      {data: {pokemon: p}},
+      {data: {nombre: this.pokemon?.name, pokemon: this.pokemon}},
     );
+
+    dialogRef.afterClosed().subscribe(result=>{
+      this.logger.logVerbose(`[DetalleComponent] resultado modal=[${result}]`);
+      if (result && this.pokemon !== undefined){
+        this.pokemon.is_favorite=false;
+        this.servicio.addFavoritos(this.pokemon);
+      }
+    });
   }
   
 }

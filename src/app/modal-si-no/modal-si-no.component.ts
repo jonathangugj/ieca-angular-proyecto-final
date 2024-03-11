@@ -1,8 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { MiPokemon } from '../model/MiPokemon';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
+import { LoggingService } from '../logging.service';
 
 export interface ModalData {
+  nombre: string,
   pokemon: MiPokemon
 }
 
@@ -13,12 +15,10 @@ export interface ModalData {
 })
 export class ModalSiNoComponent {
 
-  public respuestaSi:string="si";
-
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: ModalData
+    @Inject(MAT_DIALOG_DATA) public data: ModalData,
+    private logger: LoggingService
   ) {
-
+    this.logger.logVerbose(`[ModalSiNoComponent] Data: {nombre: ${data.nombre}}`);
   }
-
 }

@@ -17,11 +17,11 @@ export class PokemonService {
 
   private static api = new PokemonClient();
   private static api_moves = new MoveClient();
-  public movimientos: MiMovimiento[]=[];
+  private  movimientos: MiMovimiento[]=[];
 
   private favoritos: MiPokemon[]=[];
 
-  addFavoritos(pokemon: MiPokemon){
+  public addFavoritos(pokemon: MiPokemon){
     this.logger.logVerbose("[PokemonService] Entrando a addFavoritos");
     //Se valida si el elemento esta duplicado
     if (this.favoritos.length !== 0) {
@@ -32,21 +32,23 @@ export class PokemonService {
           return e.id !== pokemon.id;
         });
       } else {
+        pokemon.is_favorite=true;
         this.favoritos.push(pokemon);
         this.logger.logVerbose(`[PokemonService] Se agrega ${pokemon.name} a favoritos`, this.favoritos.length);
       }
     } else {
       this.favoritos.push(pokemon);
+      pokemon.is_favorite=true;
       this.logger.logVerbose(`[PokemonService] Se agrega ${pokemon.name} a favoritos`, this.favoritos.length);
     }
   }
 
-  getFavoritos(): MiPokemon[]{
+  public getFavoritos(): MiPokemon[]{
     this.logger.logVerbose(`[PokemonService] Numero de pokemones en favoritos [${this.favoritos.length}]`);
     return this.favoritos;
   }
 
-  esFavorito(pokemon:MiPokemon): boolean {
+  public esFavorito(pokemon:MiPokemon): boolean {
     let miPokemon=this.favoritos.find((e)=> e.id === pokemon.id);
     if (miPokemon !== undefined) {
       this.logger.logVerbose(`[PokemonService] ${pokemon} esta en favoritos`);
@@ -56,7 +58,7 @@ export class PokemonService {
     return false;  
   }
 
-  async getListaPokemon(inicio: number, cantidad:number): Promise<string[]>{
+  public async getListaPokemon(inicio: number, cantidad:number): Promise<string[]>{
     this.logger.logVerbose(`[PokemonService] Inicio getListaPokemon`);
     this.logger.logVerbose(`[PokemonService] Obteniendo [${cantidad}] pokemones, iniciando en ${inicio}`);
     let nombres: string[]=[];
@@ -74,7 +76,7 @@ export class PokemonService {
     return nombres;
   }
 
-  async getMiPokemonPorNombre(nombre: string): Promise<MiPokemon|null>{
+  public async getMiPokemonPorNombre(nombre: string): Promise<MiPokemon|null>{
     this.logger.logVerbose(`[PokemonService] Inicio getMiPokemonPorNombre (${nombre})`);
 
     try{
@@ -110,6 +112,8 @@ export class PokemonService {
           movimiento.target, movimiento.type,movimiento.learned_by_pokemon));
       });
       pokemon.movimientos=movimientos;
+      //Se valida si el pokemon ya esta en favoritos
+      pokemon.is_favorite=this.esFavorito(pokemon);
       this.logger.logVerbose(`[PokemonService] Fin getMiPokemonPorNombre (${nombre})`);
       return pokemon;
     }catch (error){

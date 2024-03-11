@@ -21,7 +21,7 @@ export class BuscaComponent {
   public paginas: number[]=[];
   public padre:string="busca";
 
-  async consultaPokemones(inicio: number, cantidad:number){
+  private async consultaPokemones(inicio: number, cantidad:number){
     this.logger.logVerbose("[BuscaComponent] Inicio consultaPokemones");
     if (this.pokemones.length > 0) {
       this.logger.logVerbose("[BuscaComponent] Se depura lista de pokemos para nueva consulta ", this.pokemones.length);
@@ -62,7 +62,7 @@ export class BuscaComponent {
     this.consultaPokemones(0, 5);
   }
 
-  handlePageEvent($event: PageEvent) {
+  public handlePageEvent($event: PageEvent) {
     this.logger.logVerbose("[BuscaComponent] Cargando pagina seleccionada");
     this.consultaPokemones(($event.pageIndex * $event.pageSize), $event.pageSize);
   }
