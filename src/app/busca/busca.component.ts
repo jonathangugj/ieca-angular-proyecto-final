@@ -1,9 +1,9 @@
 import { Component} from '@angular/core';
 import { MiPokemon } from '../model/MiPokemon';
 import { PokemonService } from '../pokemon.service';
-import { AppComponent } from '../app.component';
 import { PageEvent } from '@angular/material/paginator';
 import { LoggingService } from '../logging.service';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-busca',
@@ -17,14 +17,14 @@ export class BuscaComponent {
   ){}
 
   public pokemones:MiPokemon[]=[];
-  public totalPokemones: number=500;
+  public totalPokemones: number=AppComponent.LIMITE_POKEMONES;
   public paginas: number[]=[];
   public padre:string="busca";
 
   private async consultaPokemones(inicio: number, cantidad:number){
     this.logger.logVerbose("[BuscaComponent] Inicio consultaPokemones");
     if (this.pokemones.length > 0) {
-      this.logger.logVerbose("[BuscaComponent] Se depura lista de pokemos para nueva consulta ", this.pokemones.length);
+      this.logger.logVerbose("[BuscaComponent] Se depura lista de pokemones para nueva consulta ", this.pokemones.length);
       while(this.pokemones.length > 0) {
         this.pokemones.pop();
       }
@@ -46,14 +46,14 @@ export class BuscaComponent {
         this.logger.logError(error);
       }
     }
-    this.pokemones.sort((a,b)=>{
-      if (a.id < b.id)
-        return -1;
-      else if (a.id > b.id)
-        return 1;
-      else
-        return 0; 
-    });
+    // this.pokemones.sort((a,b)=>{
+    //   if (a.id < b.id)
+    //     return -1;
+    //   else if (a.id > b.id)
+    //     return 1;
+    //   else
+    //     return 0; 
+    // });
     this.logger.logVerbose("[BuscaComponent] Fin consultaPokemones");
   }
 

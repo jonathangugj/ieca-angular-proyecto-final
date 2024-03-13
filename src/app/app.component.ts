@@ -9,6 +9,6 @@ import { PokemonService } from './pokemon.service';
 })
 export class AppComponent {
   title = 'diccionario-pokemon';
-  public static TOT_X_PAGINA:number=10;
+  public static LIMITE_POKEMONES=151;
 
 }

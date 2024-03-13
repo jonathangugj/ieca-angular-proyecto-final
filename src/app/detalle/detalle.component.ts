@@ -32,7 +32,7 @@ export class DetalleComponent {
     if (this.padre===undefined) {
       return false;
     } else {
-      if (this.padre==="busca"){
+      if (this.padre==="busca" || this.padre === "buscar"){
         return true;
       } else {
         if (this.pokemon === undefined)
@@ -52,7 +52,7 @@ export class DetalleComponent {
 
   public getMuestraEnBusca():boolean{
     if (this.padre !== undefined)
-      return this.padre==="busca";
+      return this.padre==="busca" || this.padre === "buscar";
     else 
       return false;
   }

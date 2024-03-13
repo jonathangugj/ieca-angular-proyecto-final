@@ -1,5 +1,6 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -21,7 +22,18 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { BuscarComponent } from './buscar/buscar.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FooterComponent } from './footer/footer.component';
-import { MatLabel } from '@angular/material/form-field';
+import { MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
+import { 
+  FormsModule, 
+  FormControl, 
+  FormGroupDirective,
+  Validators,
+  ReactiveFormsModule,
+
+ } from '@angular/forms';
+
+ import { MatInputModule } from '@angular/material/input';
+ import { MatFormFieldModule } from "@angular/material/form-field";
 
 import {
   MatDialogTitle,
@@ -33,6 +45,8 @@ import { ModalSiNoComponent } from './modal-si-no/modal-si-no.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ConfiguracionService, LoggingLevel } from './configuracion.service';
 import { catchError, map, of } from 'rxjs';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { NgModel } from '@angular/forms';
 
 export function loadConfig(http: HttpClient, config: ConfiguracionService): (() => Promise<boolean>) {
   return (): Promise<boolean> => {
@@ -83,7 +97,14 @@ export function loadConfig(http: HttpClient, config: ConfiguracionService): (() 
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
-    MatLabel
+    MatLabel,
+    MatFormField,
+    MatHint,
+    MatSelect,
+    MatOption,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [
     provideClientHydration(),
