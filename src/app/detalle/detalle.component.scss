@@ -1,6 +1,7 @@
 .poke-card {
     margin: 10px;
     overflow: auto;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 
 .poke-type {
@@ -19,7 +20,7 @@
 }
 
 .poke-type-dark {
-    color: rgba(0, 0, 0, .6);
+    color: rgba(255, 255, 255, 0.6);
     background: #263238;
     text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
     margin: 5px;
@@ -27,8 +28,8 @@
 }
 
 .poke-type-dragon {
-    color: rgba(0, 0, 0, 0);
-    background: #6e6e6e;
+    color: rgba(255, 255, 255, 0);
+    background: #311b92;
     text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
     margin: 5px;
     padding: 2px;
@@ -36,7 +37,7 @@
 
 .poke-type-electric {
     color: rgba(0, 0, 0, .6);
-    background: #6e6e6e;
+    background: #fdd835;
     text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
     margin: 5px;
     padding: 2px;
@@ -44,7 +45,7 @@
 
 .poke-type-fairy {
     color: rgba(0, 0, 0, .6);
-    background: #6e6e6e;
+    background: #f8bbd0;
     text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
     margin: 5px;
     padding: 2px;
@@ -52,7 +53,7 @@
 
 .poke-type-fighting {
     color: rgba(0, 0, 0, .6);
-    background: #6e6e6e;
+    background: #827717;
     text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
     margin: 5px;
     padding: 2px;
@@ -60,7 +61,7 @@
 
 .poke-type-fire {
     color: rgba(0, 0, 0, .6);
-    background: #6e6e6e;
+    background: #ff5722;
     text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
     margin: 5px;
     padding: 2px;
@@ -68,15 +69,15 @@
 
 .poke-type-flying {
     color: rgba(0, 0, 0, .6);
-    background: #6e6e6e;
+    background: #d1c4e9;
     text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
     margin: 5px;
     padding: 2px;
 }
 
 .poke-type-ghost {
-    color: rgba(0, 0, 0, .6);
-    background: #6e6e6e;
+    color: rgba(255, 255, 255, .6);
+    background: #311b92;
     text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
     margin: 5px;
     padding: 2px;
@@ -92,7 +93,7 @@
 
 .poke-type-ground {
     color: rgba(0, 0, 0, .6);
-    background: #6e6e6e;
+    background: #795548;
     text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
     margin: 5px;
     padding: 2px;
@@ -100,7 +101,7 @@
 
 .poke-type-ice {
     color: rgba(0, 0, 0, .6);
-    background: #6e6e6e;
+    background: #80deea;
     text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
     margin: 5px;
     padding: 2px;
@@ -124,7 +125,7 @@
 
 .poke-type-psychic {
     color: rgba(0, 0, 0, .6);
-    background: #6e6e6e;
+    background: #ec407a;
     text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
     margin: 5px;
     padding: 2px;
@@ -132,7 +133,7 @@
 
 .poke-type-rock {
     color: rgba(0, 0, 0, .6);
-    background: #6e6e6e;
+    background: #a1887f;
     text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
     margin: 5px;
     padding: 2px;
@@ -140,7 +141,7 @@
 
 .poke-type-steel {
     color: rgba(0, 0, 0, .6);
-    background: #6e6e6e;
+    background: #bdbdbd;
     text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
     margin: 5px;
     padding: 2px;
@@ -148,7 +149,7 @@
 
 .poke-type-water {
     color: rgba(0, 0, 0, .6);
-    background: #6e6e6e;
+    background: #81d4fa;
     text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
     margin: 5px;
     padding: 2px;
@@ -158,11 +159,130 @@
     display: inline-block;
 }
 
-.poke-backgr {
-    background: #1C6EA4;
-    background: -moz-linear-gradient(-45deg, #1C6EA4 0%, #2388CB 50%, #144E75 100%);
-    background: -webkit-linear-gradient(-45deg, #1C6EA4 0%, #2388CB 50%, #144E75 100%);
-    background: linear-gradient(135deg, #1C6EA4 0%, #2388CB 50%, #144E75 100%);
+.poke-backgr-bug {
+    background: #afb42b;
+    background: -moz-linear-gradient(-45deg, #afb42b 0%, #c0ca33 50%, #cddc39 100%);
+    background: -webkit-linear-gradient(-45deg, #afb42b 0%, #c0ca33 50%, #cddc39 100%);
+    background: linear-gradient(135deg, #afb42b 0%, #c0ca33 50%, #cddc39 100%);
+}
+
+.poke-backgr-dark {
+    background: #424242;
+    background: -moz-linear-gradient(-45deg, #424242 0%, #616161 50%, #757575 100%);
+    background: -webkit-linear-gradient(-45deg, #424242 0%, #616161 50%, #757575 100%);
+    background: linear-gradient(135deg, #424242 0%, #616161 50%, #757575 100%);
+}
+
+.poke-backgr-dragon {
+    background: #651fff;
+    background: -moz-linear-gradient(-45deg, #651fff 0%, #7c4dff 50%, #b388ff 100%);
+    background: -webkit-linear-gradient(-45deg, #651fff 0%, #7c4dff 50%, #b388ff 100%);
+    background: linear-gradient(135deg, #651fff 0%, #7c4dff 50%, #b388ff 100%);
+}
+
+.poke-backgr-electric {
+    background: #fff59d;
+    background: -moz-linear-gradient(-45deg, #fff59d 0%, #fff9c4  50%, #fffde7 100%);
+    background: -webkit-linear-gradient(-45deg, #fff59d 0%, #fff9c4  50%, #fffde7 100%);
+    background: linear-gradient(135deg, #fff59d 0%, #fff9c4  50%, #fffde7 100%);
+}
+
+.poke-backgr-fairy {
+    background: #f48fb1;
+    background: -moz-linear-gradient(-45deg, #f48fb1 0%, #f8bbd0 50%, #fce4ec 100%);
+    background: -webkit-linear-gradient(-45deg, #f48fb1 0%, #f8bbd0 50%, #fce4ec 100%);
+    background: linear-gradient(135deg, #f48fb1 0%, #f8bbd0 50%, #fce4ec 100%);
+}
+
+.poke-backgr-fighting {
+    background: #9e9d24;
+    background: -moz-linear-gradient(-45deg, #9e9d24 0%, #afb42b 50%, #c0ca33 100%);
+    background: -webkit-linear-gradient(-45deg, #9e9d24 0%, #afb42b 50%, #c0ca33 100%);
+    background: linear-gradient(135deg, #9e9d24 0%, #afb42b 50%, #c0ca33 100%);
+}
+
+.poke-backgr-fire {
+    background: #f57f17;
+    background: -moz-linear-gradient(-45deg, #f57f17 0%, #f9a825 50%, #f9a825 100%);
+    background: -webkit-linear-gradient(-45deg, #f57f17 0%, #f9a825 50%, #f9a825 100%);
+    background: linear-gradient(135deg, #f57f17 0%, #f9a825 50%, #f9a825 100%);
+}
+
+.poke-backgr-flying {
+    background: #1565c0;
+    background: -moz-linear-gradient(-45deg, #1565c0 0%, #1976d2 50%, #1e88e5 100%);
+    background: -webkit-linear-gradient(-45deg, #1565c0 0%, #1976d2 50%, #1e88e5 100%);
+    background: linear-gradient(135deg, #1565c0 0%, #1976d2 50%, #1e88e5 100%);
+}
+
+.poke-backgr-ghost {
+    background: #b39ddb;
+    background: -moz-linear-gradient(-45deg, #b39ddb 0%, #9575cd 50%, #7e57c2 100%);
+    background: -webkit-linear-gradient(-45deg, #b39ddb 0%, #9575cd 50%, #7e57c2 100%);
+    background: linear-gradient(135deg, #b39ddb 0%, #9575cd 50%, #7e57c2 100%);
+}
+
+.poke-backgr-grass {
+    background: #a5d6a7;
+    background: -moz-linear-gradient(-45deg, #a5d6a7 0%, #c8e6c9 50%, #e8f5e9 100%);
+    background: -webkit-linear-gradient(-45deg, #a5d6a7 0%, #c8e6c9 50%, #e8f5e9 100%);
+    background: linear-gradient(135deg, #a5d6a7 0%, #c8e6c9 50%, #e8f5e9 100%);
+}
+
+.poke-backgr-ground {
+    background: #a1887f;
+    background: -moz-linear-gradient(-45deg, #a1887f 0%, #bcaaa4 50%, #d7ccc8 100%);
+    background: -webkit-linear-gradient(-45deg, #a1887f 0%, #bcaaa4 50%, #d7ccc8 100%);
+    background: linear-gradient(135deg, #a1887f 0%, #bcaaa4 50%, #d7ccc8 100%);
+}
+
+.poke-backgr-ice {
+    background: #00e5ff ;
+    background: -moz-linear-gradient(-45deg, #00e5ff  0%, #18ffff 50%, #84ffff 100%);
+    background: -webkit-linear-gradient(-45deg, #00e5ff  0%, #18ffff 50%, #84ffff 100%);
+    background: linear-gradient(135deg, #00e5ff  0%, #18ffff 50%, #84ffff 100%);
+}
+
+.poke-backgr-normal {
+    background: #eeeeee;
+    background: -moz-linear-gradient(-45deg, #eeeeee 0%, #f5f5f5 50%, #fafafa 100%);
+    background: -webkit-linear-gradient(-45deg, #eeeeee 0%, #f5f5f5 50%, #fafafa 100%);
+    background: linear-gradient(135deg, #eeeeee 0%, #f5f5f5 50%, #fafafa 100%);
+}
+
+.poke-backgr-poison {
+    background: #7e57c2;
+    background: -moz-linear-gradient(-45deg, #7e57c2 0%, #9575cd 50%, #b39ddb 100%);
+    background: -webkit-linear-gradient(-45deg, #7e57c2 0%, #9575cd 50%, #b39ddb 100%);
+    background: linear-gradient(135deg, #7e57c2 0%, #9575cd 50%, #b39ddb 100%);
+}
+
+.poke-backgr-psychic {
+    background: #ce93d8;
+    background: -moz-linear-gradient(-45deg, #ce93d8 0%, #e1bee7 50%, #f3e5f5 100%);
+    background: -webkit-linear-gradient(-45deg, #ce93d8 0%, #e1bee7 50%, #f3e5f5 100%);
+    background: linear-gradient(135deg, #ce93d8 0%, #e1bee7 50%, #f3e5f5 100%);
+}
+
+.poke-backgr-rock {
+    background: #a1887f;
+    background: -moz-linear-gradient(-45deg, #a1887f 0%, #bcaaa4 50%, #d7ccc8 100%);
+    background: -webkit-linear-gradient(-45deg, #a1887f 0%, #bcaaa4 50%, #d7ccc8 100%);
+    background: linear-gradient(135deg, #a1887f 0%, #bcaaa4 50%, #d7ccc8 100%);
+}
+
+.poke-backgr-steel {
+    background: #b0bec5;
+    background: -moz-linear-gradient(-45deg, #b0bec5 0%, #cfd8dc 50%, #eceff1 100%);
+    background: -webkit-linear-gradient(-45deg, #b0bec5 0%, #cfd8dc 50%, #eceff1 100%);
+    background: linear-gradient(135deg, #b0bec5 0%, #cfd8dc 50%, #eceff1 100%);
+}
+
+.poke-backgr-water {
+    background: #81d4fa;
+    background: -moz-linear-gradient(-45deg, #81d4fa 0%, #b3e5fc 50%, #e1f5fe 100%);
+    background: -webkit-linear-gradient(-45deg, #81d4fa 0%, #b3e5fc 50%, #e1f5fe 100%);
+    background: linear-gradient(135deg, #81d4fa 0%, #b3e5fc 50%, #e1f5fe 100%);
 }
 
 .poke-center {

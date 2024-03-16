@@ -27,6 +27,7 @@ export class BuscarComponent {
   public valorNaturaleza:string="";
   public valorHabilidad:string="";
   public valorHabitat:string="";
+  public progreso:number=100;
 
   public tiposDeBusqueda:string[]=[
     "nombre",
@@ -50,9 +51,11 @@ export class BuscarComponent {
   private async buscaPorNombre(nombre: string){
     let pokemon = await this.api.getMiPokemonPorNombre(nombre);
     this.resultado.push(pokemon);
+    this.progreso=100;
   }
 
   private async consultaPrimeraGeneracion(tipo:string) {
+    this.logger.logInfo(`[BuscarComponent][consultaPrimeraGeneracion] Progreso=[${this.progreso}]`);
     switch (tipo) {
       case "tipo":
         this.logger.logInfo(`[BuscarComponent][consultaPrimeraGeneracion] Buscando pokemones por tipo=[${this.valorTipo}]`);
@@ -109,10 +112,15 @@ export class BuscarComponent {
         this.logger.logInfo(`[BuscarComponent][consultaPrimeraGeneracion] Agregando a ${pokemon.name}`);
         this.resultado.push(pokemon);
       }
+      this.progreso = Math.floor((index * 100) / 151);
     }
+    if(this.progreso >= 99)
+      this.progreso=0;
+    this.logger.logInfo(`[BuscarComponent][consultaPrimeraGeneracion] Progreso=[${this.progreso}]`);
   }
 
   public onBusqueda(tipo: string){
+    this.progreso=0;
     if(this.resultado.length > 0){
       while(this.resultado.length > 0){
         this.resultado.pop();
@@ -131,6 +139,11 @@ export class BuscarComponent {
     return resultado;
   }
 
+  public getProgreso():Observable<number> {
+    const progreso = of(this.progreso);
+    return progreso;
+  }
+
   ngOnInit(){
     this.logger.logInfo(`[BuscarComponent][ngOnInit] Cargando catalogos`);
     this.api.cargaTipos();
@@ -145,6 +158,7 @@ export class BuscarComponent {
     this.habitats = this.api.getHabitats();
     //al cargar la pagina se inicializa la bandera de mostrar resultado
     this.despliegaResultado = false;
+    this.progreso=0;
   }
 
   

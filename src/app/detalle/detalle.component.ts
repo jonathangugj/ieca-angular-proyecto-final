@@ -64,6 +64,17 @@ export class DetalleComponent {
       return this.pokemon.is_favorite?"primary":"";
   }
 
+  public getTipoDefault():string {
+    let tipo:string="";
+    if (this.pokemon !== undefined) {
+      this.pokemon.types.forEach((element)=>{
+        if(tipo === "")
+          tipo = element.type.name;
+      });
+    }
+    return tipo;
+  }
+
   public muestraModal() {
     let respuesta:string="";
     const dialogRef = this.modal.open(

@@ -1,9 +1,12 @@
 <!-- #region parametros_busqueda-->
 <div class="row container">
-    <div class="col s12">
-        <h1>
-            Busqueda de Pokémones
-        </h1>
+    <div class="contenedor col s12">
+        <h2>
+            <span class="title-word title-word-1">Busqueda </span>
+            <span class="title-word title-word-2">de </span>
+            <span class="title-word title-word-3">Pokémones</span>
+              
+        </h2>
     </div>
     <div class="col s6">
         <mat-form-field>
@@ -106,10 +109,12 @@
     }
     <!-- Boton de busqueda -->
     <div class="col s1">
-        <button mat-fab color="primary" (click)="onBusqueda(busquedaSeleccionada.value)">
+        <button mat-fab class="button-74" color="primary" (click)="onBusqueda(busquedaSeleccionada.value)">
             <mat-icon>search</mat-icon>
         </button>
     </div>
+    <!-- barra de progreso -->
+        <mat-progress-bar mode="determinate" value="{{getProgreso() | async}}"></mat-progress-bar>
 </div>
 <!-- #endregion parametros_busqueda-->
 <!-- #region resultado-->

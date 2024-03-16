@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { MiMovimiento } from './model/MiMovimiento';
-import { PokemonService } from './pokemon.service';
 
 @Component({
   selector: 'app-root',
