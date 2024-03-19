@@ -1,6 +1,5 @@
 import { NamedAPIResource, Pokemon, PokemonAbility, PokemonHeldItem, PokemonMove, PokemonPastType, PokemonSprites, PokemonStat, PokemonType, VersionGameIndex } from "pokenode-ts";
 import { MiEspecie } from "./MiEspecie";
-import { Utilidades } from "./Utilidades";
 import { MiMovimiento } from "./MiMovimiento";
 
 export class MiPokemon implements Pokemon {

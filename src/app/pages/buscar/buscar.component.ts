@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { LoggingService } from '../logging.service';
-import { PokemonService } from '../pokemon.service';
-import { MiPokemon } from '../model/MiPokemon';
+import { LoggingService } from '../../services/logging.service';
+import { PokemonService } from '../../services/pokemon.service';
+import { MiPokemon } from '../../model/classes/MiPokemon';
 import { Observable, of } from 'rxjs';
-import { AppComponent } from '../app.component';
+import { AppComponent } from '../../app.component';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-buscar',
@@ -41,6 +42,8 @@ export class BuscarComponent {
   public despliegaResultado:boolean=false;
   public resultado:MiPokemon[]=[];
 
+  public campoRequerido = new FormControl('', [Validators.required]);
+
   constructor(
     private logger:LoggingService,
     private api: PokemonService
@@ -52,6 +55,10 @@ export class BuscarComponent {
     let pokemon = await this.api.getMiPokemonPorNombre(nombre);
     this.resultado.push(pokemon);
     this.progreso=100;
+  }
+
+  getErrorMessage() {
+    return 'Campo requerido';
   }
 
   private async consultaPrimeraGeneracion(tipo:string) {
@@ -77,7 +84,13 @@ export class BuscarComponent {
         break;
     }
     for (let index = 1; index <= AppComponent.LIMITE_POKEMONES; index++) {
-      const pokemon = await this.api.getMiPokemonPorId(index);
+      let pokemon:MiPokemon;
+      try{
+        pokemon = await this.api.getMiPokemonPorId(index);
+      } catch(error){
+        this.logger.logError(`Error: [${Error}]`)
+        continue;
+      }
       let resultado:boolean=false;
       //busqueda por tipo
       if (tipo==="tipo") {
@@ -116,7 +129,7 @@ export class BuscarComponent {
     }
     if(this.progreso >= 99)
       this.progreso=0;
-    this.logger.logInfo(`[BuscarComponent][consultaPrimeraGeneracion] Progreso=[${this.progreso}]`);
+    this.logger.logVerbose(`[BuscarComponent][consultaPrimeraGeneracion] Progreso=[${this.progreso}]`);
   }
 
   public onBusqueda(tipo: string){
@@ -159,7 +172,5 @@ export class BuscarComponent {
     //al cargar la pagina se inicializa la bandera de mostrar resultado
     this.despliegaResultado = false;
     this.progreso=0;
-  }
-
-  
+  } 
 }

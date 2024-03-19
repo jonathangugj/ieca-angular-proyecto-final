@@ -1,9 +1,9 @@
 import { Component, Inject, Input } from '@angular/core';
-import { MiPokemon } from '../model/MiPokemon';
-import { PokemonService } from '../pokemon.service';
+import { MiPokemon } from '../../model/classes/MiPokemon';
+import { PokemonService } from '../../services/pokemon.service';
 import { ModalSiNoComponent } from '../modal-si-no/modal-si-no.component';
 import { MatDialog } from '@angular/material/dialog';
-import { LoggingService } from '../logging.service';
+import { LoggingService } from '../../services/logging.service';
 
 @Component({
   selector: 'app-detalle',
@@ -12,7 +12,7 @@ import { LoggingService } from '../logging.service';
 })
 export class DetalleComponent {
 
-  constructor(private servicio: PokemonService,
+  constructor(private api: PokemonService,
               private modal: MatDialog,
               private logger: LoggingService ){
 
@@ -23,8 +23,8 @@ export class DetalleComponent {
 
   public agregaFavoritos() {
     if (this.pokemon !== undefined) {
-      this.logger.logVerbose(`[DetalleComponent] Agregando a favoritos a ${this.pokemon.name}`);
-      this.servicio.addFavoritos(this.pokemon);
+      this.logger.logVerbose(`[DetalleComponent][agregaFavoritos] Agregando a ${this.pokemon.name}`);
+      this.api.addFavoritos(this.pokemon);
     }
   }
 
@@ -59,7 +59,7 @@ export class DetalleComponent {
 
   public colorFavoritos():string{
     if (this.pokemon === undefined){
-      return " ";
+      return "";
     }
       return this.pokemon.is_favorite?"primary":"";
   }
@@ -83,10 +83,10 @@ export class DetalleComponent {
     );
 
     dialogRef.afterClosed().subscribe(result=>{
-      this.logger.logVerbose(`[DetalleComponent] resultado modal=[${result}]`);
+      this.logger.logVerbose(`[DetalleComponent][muestraModal] resultado modal=[${result}]`);
       if (result && this.pokemon !== undefined){
         this.pokemon.is_favorite=false;
-        this.servicio.addFavoritos(this.pokemon);
+        this.api.addFavoritos(this.pokemon);
       }
     });
   }

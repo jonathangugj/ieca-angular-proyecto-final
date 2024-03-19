@@ -1,12 +1,10 @@
-import { Injectable, ɵflushModuleScopingQueueAsMuchAsPossible } from '@angular/core';
-import { MoveClient, PokemonClient} from 'pokenode-ts';
-import { MiPokemon } from './model/MiPokemon';
-import { MiEspecie } from './model/MiEspecie';
-import { MiMovimiento } from './model/MiMovimiento';
+import { Injectable} from '@angular/core';
+import { PokemonClient} from 'pokenode-ts';
+import { MiPokemon } from '../model/classes/MiPokemon';
+import { MiEspecie } from '../model/classes/MiEspecie';
 import { LoggingService } from './logging.service';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { AppComponent } from './app.component';
+import { Observable, Subject, of } from 'rxjs';
+import { DatabaseService, Favoritos } from './database.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,14 +13,14 @@ import { AppComponent } from './app.component';
 export class PokemonService {
   constructor(
     private logger: LoggingService,
-    private http: HttpClient
+    private dbService: DatabaseService
   ) { 
 
   }
 
   private static api = new PokemonClient();
-  private static api_moves = new MoveClient();
   private favoritos: MiPokemon[]=[];
+  private favoritosDB: MiPokemon[]=[];
   private tipos:string[]=[];
   private grupos:string[]=[];
   private naturalezas:string[]=[];
@@ -31,43 +29,58 @@ export class PokemonService {
   private resultado:MiPokemon[]=[];
 
   public addFavoritos(pokemon: MiPokemon){
-    this.logger.logVerbose("[PokemonService] Entrando a addFavoritos");
+    this.logger.logInfo("[PokemonService][addFavoritos] Inicio");
     //Se valida si el elemento esta duplicado
     if (this.favoritos.length !== 0) {
       let miPokemon=this.favoritos.find((e)=> e.id === pokemon.id);
       if (miPokemon !== undefined) {
-        this.logger.logVerbose(`[PokemonService] Elemento ${pokemon.name} en favoritos, se removera`);
+        this.logger.logVerbose(`[PokemonService][addFavoritos] Elemento ${pokemon.name} en favoritos, se removera`);
         this.favoritos=this.favoritos.filter((e)=>{
           return e.id !== pokemon.id;
         });
       } else {
         pokemon.is_favorite=true;
         this.favoritos.push(pokemon);
-        this.logger.logVerbose(`[PokemonService] Se agrega ${pokemon.name} a favoritos`, this.favoritos.length);
+        this.logger.logVerbose(`[PokemonService][addFavoritos] Se agrega ${pokemon.name} a favoritos`, this.favoritos.length);
       }
     } else {
       this.favoritos.push(pokemon);
       pokemon.is_favorite=true;
-      this.logger.logVerbose(`[PokemonService] Se agrega ${pokemon.name} a favoritos`, this.favoritos.length);
+      this.logger.logVerbose(`[PokemonService][addFavoritos] Se agrega ${pokemon.name} a favoritos`, this.favoritos.length);
     }
+    this.logger.logInfo("[PokemonService][addFavoritos] Fin");
   }
 
   public getFavoritos():MiPokemon[]{
     return this.favoritos;
   } 
 
+  public getFavoritosDB():Observable<MiPokemon[]>{
+    this.logger.logInfo(`[PokemonService][getFavoritosDB] Inicio`);
+    const favoritos = of(this.favoritosDB);
+    this.logger.logInfo(`[PokemonService][getFavoritosDB] Fin`);
+    return favoritos;
+  } 
+
+  public async addFavoritoDb(favorito:Favoritos){
+    this.logger.logInfo(`[PokemonService][addFavoritoDb] Inicio`, this.favoritosDB.length);
+    const pokemon = await this.getMiPokemonPorNombre(favorito.name);
+    this.favoritosDB.push(pokemon);
+    this.logger.logInfo(`[PokemonService][addFavoritoDb] Fin`, this.favoritosDB.length);
+  }
+
   public esFavorito(pokemon:MiPokemon): boolean {
     let miPokemon=this.favoritos.find((e)=> e.id === pokemon.id);
     if (miPokemon !== undefined) {
-      this.logger.logVerbose(`[PokemonService] ${pokemon} esta en favoritos`);
+      this.logger.logVerbose(`[PokemonService][esFavorito] ${pokemon} esta en favoritos`);
       return true;
     }
-    this.logger.logVerbose(`[PokemonService] ${pokemon} NO esta en favoritos`);
+    this.logger.logVerbose(`[PokemonService][esFavorito] ${pokemon} NO esta en favoritos`);
     return false;  
   }
 
   public async getListaPokemon(inicio: number, cantidad:number): Promise<string[]>{
-    this.logger.logInfo(`[PokemonService] Inicio getListaPokemon`);
+    this.logger.logInfo(`[PokemonService][getListaPokemon] Inicio`);
     this.logger.logVerbose(`[PokemonService] Obteniendo [${cantidad}] pokemones, iniciando en ${inicio}`);
     let nombres: string[]=[];
     try{
@@ -77,13 +90,14 @@ export class PokemonService {
       }));
     } catch (error){
       this.logger.logError(`[PokemonService][getListaPokemon] ${error}`);
+      throw Error('Intenta mas tarde');
     }
-    this.logger.logInfo(`[PokemonService] Fin getListaPokemon`);
+    this.logger.logInfo(`[PokemonService][getListaPokemon] Fin`);
     return nombres;
   }
 
   public async getMiPokemonPorNombre(nombre: string): Promise<MiPokemon>{
-    this.logger.logInfo(`[PokemonService] Inicio getMiPokemonPorNombre (${nombre})`);
+    this.logger.logInfo(`[PokemonService][getMiPokemonPorNombre] Inicio (${nombre})`);
     let pokemon!:MiPokemon;
     try{
       //Se consulta la información del pokemon
@@ -107,16 +121,17 @@ export class PokemonService {
           dataSpecie.form_descriptions,dataSpecie.genera,dataSpecie.varieties);
         pokemon.is_favorite=this.esFavorito(pokemon);
       }
-      this.logger.logVerbose(`[PokemonService] Fin getMiPokemonPorNombre (${nombre})`);
+      this.logger.logVerbose(`[PokemonService][getMiPokemonPorNombre] Fin`);
     }catch (error){
       this.logger.logError(`[PokemonService][getMiPokemonPorNombre] ${error}`);
+      throw Error('Intenta mas tarde');
     }
-    this.logger.logVerbose(`[PokemonService] Fin getMiPokemonPorNombre (${nombre})`);
+    this.logger.logVerbose(`[PokemonService][getMiPokemonPorNombre] Fin`);
     return pokemon;
   }
 
   public async getMiPokemonPorId(id: number): Promise<MiPokemon>{
-    this.logger.logVerbose(`[PokemonService] Inicio getMiPokemonPorId (${id})`);
+    this.logger.logInfo(`[PokemonService][getMiPokemonPorId] Inicio (${id})`);
     let pokemon!:MiPokemon;
     try{
       //Se consulta la información del pokemon
@@ -142,15 +157,16 @@ export class PokemonService {
       }
     }catch (error){
       this.logger.logError(`[PokemonService][getMiPokemonPorNombre] ${error}`);
+      throw Error('Intenta mas tarde');
     }
-    this.logger.logVerbose(`[PokemonService] Fin getMiPokemonPorNombre (${id})`);
+    this.logger.logVerbose(`[PokemonService][getMiPokemonPorId] Fin (${id})`);
     return pokemon;
   }
 
   public async cargaTipos() {
-    this.logger.logInfo(`[PokemonService] Inicio carga asincrona de tipos de pokemones`);
+    this.logger.logInfo(`[PokemonService][cargaTipos] Inicio`);
     if(this.tipos.length > 0){
-      this.logger.logInfo(`[PokemonService] Catalogo de tipos cargados`);
+      this.logger.logInfo(`[PokemonService][cargaTipos] Catalogo de tipos cargado`);
       return;
     }
     try {
@@ -160,8 +176,9 @@ export class PokemonService {
       });
     } catch (error) {
       this.logger.logError(`[PokemonService][cargaTipos] ${error}`);
+      throw Error('Intenta mas tarde');
     }
-    this.logger.logInfo(`[PokemonService] Fin carga asincrona de tipos de pokemones`);
+    this.logger.logInfo(`[PokemonService][cargaTipos] Fin`);
   }
 
   public getTipos(): Observable<string[]>{
@@ -170,7 +187,11 @@ export class PokemonService {
   }
 
   public async cargaGrupos() {
-    this.logger.logInfo(`[PokemonService] Inicio carga asincrona de grupos de pokemones`);
+    this.logger.logInfo(`[PokemonService][cargaGrupos] Inicio`);
+    if(this.grupos.length > 0){
+      this.logger.logInfo(`[PokemonService][cargaGrupos] Catalogo de grupos cargado`);
+      return;
+    }
     try {
       let data = await PokemonService.api.listEggGroups();
       data.results.forEach((element) => {
@@ -178,8 +199,9 @@ export class PokemonService {
       });
     } catch (error) {
       this.logger.logError(`[PokemonService][cargaGrupos] ${error}`);
+      throw Error('Intenta mas tarde');
     }
-    this.logger.logInfo(`[PokemonService] Fin carga asincrona de grupos de pokemones`);
+    this.logger.logInfo(`[PokemonService][cargaGrupos] Fin`);
   }
 
   public getGrupos(): Observable<string[]>{
@@ -188,7 +210,11 @@ export class PokemonService {
   }
 
   public async cargaNaturalezas() {
-    this.logger.logInfo(`[PokemonService] Inicio carga asincrona de naturaleza de pokemones`);
+    this.logger.logInfo(`[PokemonService][cargaNaturalezas] Inicio`);
+    if(this.naturalezas.length > 0){
+      this.logger.logInfo(`[PokemonService][cargaNaturalezas] Catalogo de naturalezas cargado`);
+      return;
+    }
     try {
       let data = await PokemonService.api.listNatures();
       data.results.forEach((element) => {
@@ -196,8 +222,9 @@ export class PokemonService {
       });
     } catch (error) {
       this.logger.logError(`[PokemonService][cargaNaturalezas] ${error}`);
+      throw Error('Intenta mas tarde');
     }
-    this.logger.logInfo(`[PokemonService] Inicio carga asincrona de naturaleza de pokemones`);
+    this.logger.logInfo(`[PokemonService][cargaNaturalezas] Inicio carga asincrona de naturaleza de pokemones`);
   }
 
   public getNaturalezas(): Observable<string[]>{
@@ -206,7 +233,11 @@ export class PokemonService {
   }
 
   public async cargaHabilidades(){
-    this.logger.logInfo(`[PokemonService] Inicio carga asincrona de habilidades de pokemones`);
+    this.logger.logInfo(`[PokemonService][cargaHabilidades] Inicio`);
+    if(this.habilidades.length > 0){
+      this.logger.logInfo(`[PokemonService][cargaHabilidades] Catalogo de naturalezas cargado`);
+      return;
+    }
     try {
       let data = await PokemonService.api.listAbilities();
       data.results.forEach((element) => {
@@ -214,8 +245,9 @@ export class PokemonService {
       });
     } catch (error) {
       this.logger.logError(`[PokemonService][cargaHabilidades] ${error}`);
+      throw Error('Intenta mas tarde');
     }
-    this.logger.logInfo(`[PokemonService] Inicio carga asincrona de habilidades de pokemones`);
+    this.logger.logInfo(`[PokemonService] Fin`);
   }  
 
   public getHabilidades():Observable<string[]>{
@@ -224,7 +256,11 @@ export class PokemonService {
   }
 
   public async cargaHabitats() {
-    this.logger.logInfo(`[PokemonService] Inicio carga asincrona de habitats de pokemones`);
+    this.logger.logInfo(`[PokemonService][cargaHabitats] Inicio`);
+    if(this.habitats.length > 0){
+      this.logger.logInfo(`[PokemonService][cargaHabilidades] Catalogo de habitats cargado`);
+      return;
+    }
     try {
       let data = await PokemonService.api.listPokemonHabitats();
       data.results.forEach((element) => {
@@ -232,8 +268,9 @@ export class PokemonService {
       });
     } catch (error) {
       this.logger.logError(`[PokemonService][cargaHabitats] ${error}`);
+      throw Error('Intenta mas tarde');
     }
-    this.logger.logInfo(`[PokemonService] Fin carga asincrona de habitats de pokemones`);
+    this.logger.logInfo(`[PokemonService][cargaHabitats] Fin`);
   }
 
   public getHabitats():Observable<string[]>{

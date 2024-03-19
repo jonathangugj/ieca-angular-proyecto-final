@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
-import { MiPokemon } from '../model/MiPokemon';
+import { MiPokemon } from '../../model/classes/MiPokemon';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
-import { LoggingService } from '../logging.service';
+import { LoggingService } from '../../services/logging.service';
 
 export interface ModalData {
   nombre: string,

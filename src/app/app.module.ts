@@ -4,14 +4,14 @@ import { BrowserModule, provideClientHydration } from '@angular/platform-browser
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
-import { HomeComponent } from './home/home.component';
-import { BuscaComponent } from './busca/busca.component';
-import { FavoritosComponent } from './favoritos/favoritos.component';
+import { HomeComponent } from './pages/home/home.component';
+import { BuscaComponent } from './pages/busca/busca.component';
+import { FavoritosComponent } from './pages/favoritos/favoritos.component';
 
 import { MatGridListModule } from '@angular/material/grid-list';
-import { DetalleComponent } from './detalle/detalle.component';
+import { DetalleComponent } from './components/detalle/detalle.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIcon } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -19,9 +19,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { BuscarComponent } from './buscar/buscar.component';
+import { BuscarComponent } from './pages/buscar/buscar.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FooterComponent } from './footer/footer.component';
 import { MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
 import { 
   FormsModule, 
@@ -31,7 +30,6 @@ import {
   ReactiveFormsModule,
 
  } from '@angular/forms';
-
  import { MatInputModule } from '@angular/material/input';
  import { MatFormFieldModule } from "@angular/material/form-field";
 
@@ -41,9 +39,9 @@ import {
   MatDialogActions,
   MatDialogClose,
 } from '@angular/material/dialog';
-import { ModalSiNoComponent } from './modal-si-no/modal-si-no.component';
+import { ModalSiNoComponent } from './components/modal-si-no/modal-si-no.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ConfiguracionService, LoggingLevel } from './configuracion.service';
+import { ConfiguracionService, LoggingLevel } from './services/configuracion.service';
 import { catchError, map, of } from 'rxjs';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { NgModel } from '@angular/forms';
@@ -77,7 +75,6 @@ export function loadConfig(http: HttpClient, config: ConfiguracionService): (() 
     FavoritosComponent,
     DetalleComponent,
     BuscarComponent,
-    FooterComponent,
     ModalSiNoComponent,
   ],
   imports: [
@@ -104,7 +101,7 @@ export function loadConfig(http: HttpClient, config: ConfiguracionService): (() 
     MatOption,
     FormsModule,
     MatFormFieldModule,
-    MatInputModule,
+    MatInputModule, ReactiveFormsModule
   ],
   providers: [
     provideClientHydration(),
